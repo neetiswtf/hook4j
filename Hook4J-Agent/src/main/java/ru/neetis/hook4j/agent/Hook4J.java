@@ -27,8 +27,15 @@ public class Hook4J {
                 if(hook.getClazz().equals(classBeingRedefined)){
                     try {
                         final CtClass ctClass = ClassPool.getDefault().get(className);
+                        lmao:
                         for(final CtMethod ctMethod : ctClass.getMethods()){
                             if(ctMethod.getName().equals(hook.getMethod().getName())){
+                                if(ctMethod.getParameterTypes().length != hook.getMethod().getParameterTypes().length) continue;
+                                for(final CtClass parameter : ctMethod.getParameterTypes()){
+                                    for(final Class<?> parameter1 : hook.getMethod().getParameterTypes()){
+                                        if(!parameter1.getDeclaringClass().equals(parameter.toClass())) break lmao;
+                                    }
+                                }
                                 switch (hook.getHookType()){
                                     case APPEND:
                                         ctMethod.insertBefore(hook.getSource());
