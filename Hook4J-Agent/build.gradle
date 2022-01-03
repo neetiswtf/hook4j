@@ -1,0 +1,52 @@
+buildscript {
+    dependencies {
+        classpath group: 'com.github.jengelman.gradle.plugins', name: 'shadow', version: '4.0.4'
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    implementation files("../api.jar")
+    implementation 'org.javassist:javassist:3.28.0-GA'
+
+
+
+}
+
+jar{
+    manifest{
+        attributes["Agent-Class"] = "ru.neetis.hook4j.agent.Hook4J"
+        attributes["Can-Redefine-Classes"] = "true"
+        attributes["Can-Retransform-Classes"] = "true"
+        //Can-Redefine-Classes: true
+        //Can-Retransform-Classes: true
+    }
+}
+
+shadowJar {
+    dependencies { }
+    classifier = ''
+}
+configurations {
+    external
+    compile.extendsFrom external
+}
+build.dependsOn shadowJar
+
+test {
+    useJUnitPlatform()
+}

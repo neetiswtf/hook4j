@@ -1,0 +1,43 @@
+buildscript {
+    dependencies {
+        classpath group: 'com.github.jengelman.gradle.plugins', name: 'shadow', version: '4.0.4'
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    // https://mvnrepository.com/artifact/io.earcam.wrapped/com.sun.tools.attach
+    implementation 'io.earcam.wrapped:com.sun.tools.attach:1.8.0_jdk8u172-b11'
+    implementation files("../api.jar")
+
+
+
+}
+
+shadowJar {
+    dependencies { }
+    classifier = ''
+}
+configurations {
+    external
+    compile.extendsFrom external
+}
+build.dependsOn shadowJar
+
+test {
+    useJUnitPlatform()
+}
