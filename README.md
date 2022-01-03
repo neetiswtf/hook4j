@@ -22,6 +22,7 @@ public static void main(final String[] args){
 	  "System.out.println(\"Hello from Hook4J!\");"  
 	)); // Add new hook. You can append new code, or replace method body
 	hook4J.flush(); // Save all hooks.
+	hook4J.shutdown(); // If all hooks successfully completed, shutdown Hook4J
 
 	coolMethod1337(); // Call and see the result
 }
