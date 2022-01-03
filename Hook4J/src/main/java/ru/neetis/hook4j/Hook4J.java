@@ -4,6 +4,7 @@ import com.sun.tools.attach.VirtualMachine;
 import ru.neetis.hook4j.api.Hook;
 import ru.neetis.hook4j.exceptions.BootstrapException;
 import ru.neetis.hook4j.exceptions.HookException;
+import sun.jvmstat.monitor.MonitoredVmUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,8 @@ public class Hook4J {
     private static final Hook4J instance = new Hook4J();
 
     private static boolean isInitialized;
+
+    private static VirtualMachine virtualMachine;
 
     private Hook4J(){}
 
@@ -35,7 +38,7 @@ public class Hook4J {
                 Now, attach Hook4J-Agent to current JVM
              */
             final String pid = ManagementFactory.getRuntimeMXBean().getName().substring(0,  ManagementFactory.getRuntimeMXBean().getName().indexOf("@"));
-            final VirtualMachine virtualMachine = VirtualMachine.attach(pid);
+            virtualMachine = VirtualMachine.attach(pid);
             virtualMachine.loadAgent(file.getAbsolutePath());
 
             isInitialized = true;
@@ -77,5 +80,13 @@ public class Hook4J {
             If all hooks was successfully completed, then clean the tasklist
          */
         hooks.clear();
+    }
+
+    /*
+        This method unloading Hook4J library.
+     */
+    public void shutdown() throws IOException {
+        virtualMachine.detach();
+        isInitialized = false;
     }
 }
