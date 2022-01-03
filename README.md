@@ -1,4 +1,4 @@
-# Hook4J - A small Java library for hooks
+# ⭐ Hook4J - A small Java library for hooks
 
 Welcome to the Hook4J repository. Hook4J - Is a small, and fast library used for hooks in Java.
 Hook4J use Java-agents for manipulate with bytecode at runtime
